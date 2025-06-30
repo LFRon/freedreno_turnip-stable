@@ -1,6 +1,6 @@
 #!/bin/bash -e
 
-#Define variables
+# Define variables
 green='\033[0;32m'
 red='\033[0;31m'
 nocolor='\033[0m'
@@ -10,9 +10,11 @@ magiskdir="$workdir/turnip_module"
 ndkver="android-ndk-r28b"
 ndk="$workdir/$ndkver/toolchains/llvm/prebuilt/linux-x86_64/bin"
 sdkver="34"
+# 这里用于统一化修改Mesa3D最新的稳定代码分支,这样就不需要再在后面到处改Mesa3D稳定版本号,而提升构建效率
+mesa_stable_branch="25.1"
 
-#更改Mesa3D驱动源码地址,让其跟随的是Mesa3D的稳定代码分支,当前最新的稳定版本分支是25.1
-mesasrc="https://gitlab.freedesktop.org/mesa/mesa/-/archive/25.1/mesa-25.1.zip"
+# 更改Mesa3D驱动源码地址,让其跟随的是Mesa3D的稳定代码分支,当前最新的稳定版本分支是25.1
+mesasrc="https://gitlab.freedesktop.org/mesa/mesa/-/archive/25.1/mesa-$mesa_stable_branch.zip"
 
 clear
 
@@ -60,7 +62,8 @@ prepare_workdir(){
 		curl "$mesasrc" --output mesa-main.zip &> /dev/null
 	echo "Exracting mesa source ..." $'\n'
 		unzip mesa-main.zip &> /dev/null
-		cd mesa-main
+  		# 注意:这里及之后,我用$mesa_stable_branch顶替了原本的main分支,防止脚本报错
+		cd mesa-$mesa_stable_branch
 }
 
 
@@ -128,15 +131,17 @@ EOF
 
 	echo "Compiling build files ..." $'\n'
 		ninja -C build-android-aarch64 &> "$workdir/ninja_log"
-
-	if ! [ -a "$workdir"/mesa-main/build-android-aarch64/src/freedreno/vulkan/libvulkan_freedreno.so ]; then
+  
+        # 注意:在Mesa稳定分支更新后,需要更改下一行的mesa-<稳定版本>的版本号
+	if ! [ -a "$workdir"/mesa-$mesa_stable_branch/build-android-aarch64/src/freedreno/vulkan/libvulkan_freedreno.so ]; then
 		echo -e "$red Build failed! $nocolor" && exit 1
 	fi
 }
 
 port_lib_for_magisk(){
 	echo "Using patchelf to match soname ..." $'\n'
-		cp "$workdir"/mesa-main/build-android-aarch64/src/freedreno/vulkan/libvulkan_freedreno.so "$workdir"
+ 		# 注意:在Mesa稳定分支更新后,需要更改下一行的mesa-<稳定版本>的版本号
+		cp "$workdir"/mesa-$mesa_stable_branch/build-android-aarch64/src/freedreno/vulkan/libvulkan_freedreno.so "$workdir"
 		cd "$workdir"
 		patchelf --set-soname vulkan.adreno.so libvulkan_freedreno.so
 		mv libvulkan_freedreno.so vulkan.adreno.so
@@ -167,12 +172,12 @@ EOF
 EOF
 
 		cat <<EOF >"module.prop"
-id=turnip
-name=turnip
-version=$(cat $workdir/mesa-main/VERSION)
+id=freedreno_turnip_driver
+name=Turnip
+version=$mesa_stable_branch
 versionCode=1
-author=MrMiy4mo
-description=Turnip is an open-source vulkan driver for devices with adreno GPUs.
+author=MrMiy4mo,LFRon
+description=Mesa3D Freedreno子项目的Turnip开源驱动,适配Adreno 6xx+的骁龙集成显卡 .
 EOF
 
 		cat <<EOF >"customize.sh"
@@ -195,16 +200,16 @@ EOF
 port_lib_for_adrenotools(){
 	libname=vulkan.freedreno.so
 	echo "Using patchelf to match soname" $'\n'
-		cp "$workdir"/mesa-main/build-android-aarch64/src/freedreno/vulkan/libvulkan_freedreno.so "$workdir"/$libname
+		cp "$workdir"/$mesa_stable_branch/build-android-aarch64/src/freedreno/vulkan/libvulkan_freedreno.so "$workdir"/$libname
 		cd "$workdir"
 		patchelf --set-soname $libname $libname
 	echo "Preparing meta.json" $'\n'
 		cat <<EOF > "meta.json"
 {
 	"schemaVersion": 1,
-	"name": "freedreno_turnip-CI",
+	"name": "freedreno_turnip",
 	"description": "$(date)",
-	"author": "MrMiy4mo, kethen",
+	"author": "MrMiy4mo, kethen, LFRon",
 	"packageVersion": "1",
 	"vendor": "Mesa",
 	"driverVersion": "$(cat $workdir/mesa-main/VERSION)",
