@@ -2,8 +2,6 @@ name: Build "turnip"
 
 on:
   workflow_dispatch:
-  schedule:
-  - cron: "20 5 1,15 * *"
 
 jobs:
   start_building_turnip:
@@ -28,12 +26,12 @@ jobs:
           turnip_workdir/ninja_log
           turnip_workdir/mesa-main/build-android-aarch64/meson-logs/meson-log.txt
 
-    - name: Release "turnip"
+    - name: Release "turnip-Android-15"
       uses: softprops/action-gh-release@v1
       with:
         body: Turnip magisk module and driver package for adrenotools
         tag_name: github_run
         name: Weekly Action Release
         files: |
-           turnip_workdir/turnip.zip
+           turnip_workdir/turnip-magisk.zip
            turnip_workdir/turnip_adrenotools.zip
