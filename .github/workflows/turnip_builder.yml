@@ -2,8 +2,6 @@ name: Build "turnip"
 
 on:
   workflow_dispatch:
-  schedule:
-  - cron: "20 5 1,15 * *"
 
 jobs:
   start_building_turnip:
@@ -33,7 +31,7 @@ jobs:
       with:
         body: Turnip magisk module and driver package for adrenotools
         tag_name: github_run
-        name: Weekly Action Release
+        name: Turnip-Android-15
         files: |
-           turnip_workdir/turnip.zip
+           turnip_workdir/turnip-magisk.zip
            turnip_workdir/turnip_adrenotools.zip
