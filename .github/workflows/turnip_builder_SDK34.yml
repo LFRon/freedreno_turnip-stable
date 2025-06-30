@@ -1,4 +1,4 @@
-name: Build "turnip"
+name: Build Turnip for Android-15 (SDK:34)
 
 on:
   workflow_dispatch:
