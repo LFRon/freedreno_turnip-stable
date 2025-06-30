@@ -173,7 +173,7 @@ EOF
 
 		cat <<EOF >"module.prop"
 id=freedreno_turnip_driver
-name=Turnip
+name=Turnip-Stable
 version=$mesa_stable_branch
 versionCode=1
 author=MrMiy4mo,LFRon
