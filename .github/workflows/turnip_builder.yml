@@ -1,4 +1,4 @@
-name: Build "turnip"
+name: Build Turnip on Main Branch
 
 on:
   workflow_dispatch:
@@ -26,7 +26,7 @@ jobs:
           turnip_workdir/ninja_log
           turnip_workdir/mesa-main/build-android-aarch64/meson-logs/meson-log.txt
 
-    - name: Release "turnip"
+    - name: Turnip-Main-Branch-Action
       uses: softprops/action-gh-release@v1
       with:
         body: Turnip magisk module and driver package for adrenotools
