@@ -31,7 +31,7 @@ jobs:
       with:
         body: Turnip magisk module and driver package for adrenotools
         tag_name: github_run
-        name: Weekly Action Release
+        name: Turnip For Android-15(SDK:34)
         files: |
            turnip_workdir/turnip-magisk.zip
            turnip_workdir/turnip_adrenotools.zip
