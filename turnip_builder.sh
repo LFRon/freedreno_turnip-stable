@@ -10,7 +10,9 @@ magiskdir="$workdir/turnip_module"
 ndkver="android-ndk-r28b"
 ndk="$workdir/$ndkver/toolchains/llvm/prebuilt/linux-x86_64/bin"
 sdkver="34"
-mesasrc="https://gitlab.freedesktop.org/mesa/mesa/-/archive/main/mesa-main.zip"
+
+#更改Mesa3D驱动源码地址,让其跟随的是Mesa3D的稳定代码分支,当前最新的稳定版本分支是25.1
+mesasrc="https://gitlab.freedesktop.org/mesa/mesa/-/archive/25.1/mesa-25.1.zip"
 
 clear
 
