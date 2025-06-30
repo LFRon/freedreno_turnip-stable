@@ -193,7 +193,7 @@ EOF
 		zip -r "$workdir"/turnip-magisk.zip ./* &> /dev/null
 		if ! [ -a "$workdir"/turnip-magisk.zip ];
 			then echo -e "$red-Packing failed!$nocolor" && exit 1
-			else echo -e "$green-All done, the module saved to;$nocolor" && echo "$workdir"/turnip.zip
+			else echo -e "$green-All done, the module saved to;$nocolor" && echo "$workdir"/turnip-magisk.zip
 		fi
 }
 
