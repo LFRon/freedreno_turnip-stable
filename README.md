@@ -1,5 +1,5 @@
 ### 这玩意是什么?
-这是讲Mesa3D稳定版本分支的骁龙开源图形驱动Freedreno中的Turnip的Vulkan驱动构建成Magisk/KernelSU模块的构建中心,由ilhan-athn7大佬跟随main上游的构建脚本修改而成
+这是将Mesa3D稳定版本分支的骁龙开源图形驱动Freedreno中的Turnip的Vulkan驱动构建成Magisk/KernelSU模块的构建中心,由ilhan-athn7大佬跟随main上游的构建脚本修改而成
 本脚本为了稳定性而跟随Mesa3D的稳定版分支而非上游main分支
 
 ### Scheduled Releases
