@@ -11,10 +11,10 @@ ndkver="android-ndk-r28b"
 ndk="$workdir/$ndkver/toolchains/llvm/prebuilt/linux-x86_64/bin"
 sdkver="34"
 # 这里用于统一化修改Mesa3D最新的稳定代码分支,这样就不需要再在后面到处改Mesa3D稳定版本号,而提升构建效率
-mesa_stable_branch="25.1"
+mesa_stable_branch="25.2"
 
 # 更改Mesa3D驱动源码地址,让其跟随的是Mesa3D的稳定代码分支,当前最新的稳定版本分支是25.1
-mesasrc="https://gitlab.freedesktop.org/mesa/mesa/-/archive/25.1/mesa-$mesa_stable_branch.zip"
+mesasrc="https://gitlab.freedesktop.org/mesa/mesa/-/archive/$mesa_stable_branch/mesa-$mesa_stable_branch.zip"
 
 clear
 
