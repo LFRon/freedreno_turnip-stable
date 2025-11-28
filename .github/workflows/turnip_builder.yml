@@ -1,0 +1,38 @@
+name: Build Turnip on Main Branch
+
+on:
+  workflow_dispatch:
+
+jobs:
+  start_building_turnip:
+    runs-on: ubuntu-25.10
+    steps:
+    - uses: actions/checkout@v3
+
+    - name: Prepare environment
+      run: |
+        sudo sed -i 's/^Types: deb$/Types: deb deb-src/' /etc/apt/sources.list.d/ubuntu.sources
+        sudo apt update
+        sudo apt build-dep mesa -y
+        sudo apt install meson-1.5 
+
+    - name: Execute build script
+      run: bash ./turnip_builder.sh
+
+    - name: Upload a Build Artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: Upload meson and ninja logs for debugging
+        path: |
+          turnip_workdir/ninja_log
+          turnip_workdir/mesa-main/build-android-aarch64/meson-logs/meson-log.txt
+
+    - name: Turnip-Main-Branch-Action
+      uses: softprops/action-gh-release@v1
+      with:
+        body: Turnip magisk module and driver package for adrenotools
+        tag_name: github_run
+        name: Turnip-Main-Branch-Action(Android-15)
+        files: |
+           turnip_workdir/turnip-magisk.zip
+           turnip_workdir/turnip_adrenotools.zip
