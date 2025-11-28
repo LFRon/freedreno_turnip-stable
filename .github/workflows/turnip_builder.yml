@@ -3,6 +3,10 @@ name: Build Turnip on Main Branch
 on:
   workflow_dispatch:
 
+# 添加权限配置
+permissions:
+  contents: write
+
 jobs:
   start_building_turnip:
     runs-on: ubuntu-latest
