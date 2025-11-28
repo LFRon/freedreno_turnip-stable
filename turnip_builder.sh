@@ -126,7 +126,7 @@ EOF
 			-Dvulkan-beta=true \
 			-Dfreedreno-kmds=kgsl \
 			-Db_lto=true \
-   			-Db_lto_mode=full \
+   			-Db_lto_mode=thin \
    			-Doptimization=3 \
 			-Dstrip=true \
 			-Degl=disabled &> "$workdir/meson_log"
