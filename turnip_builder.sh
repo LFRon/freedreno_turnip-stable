@@ -126,9 +126,8 @@ EOF
 			-Dvulkan-beta=true \
 			-Dfreedreno-kmds=kgsl \
 			-Db_lto=true \
-   			-Db_lto_mode=full \
+   			-Db_lto_mode=thin \
 			-Dstrip=true \
-			-Doptimization=3 \
 			-Degl=disabled &> "$workdir/meson_log"
 
 	echo "Compiling build files ..." $'\n'
