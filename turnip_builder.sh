@@ -123,7 +123,7 @@ EOF
 			-Dplatforms=android \
 			-Dplatform-sdk-version="$sdkver" \
 			-Dandroid-stub=true \
-			-Dgallium-drivers= \
+			-Dgallium-drivers=zink \
 			-Dvulkan-drivers=freedreno \
 			-Dvulkan-beta=true \
 			-Dfreedreno-kmds=kgsl \
