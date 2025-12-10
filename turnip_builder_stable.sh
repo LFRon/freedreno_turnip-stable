@@ -11,12 +11,11 @@ ndkver="android-ndk-r29"
 ndk="$workdir/$ndkver/toolchains/llvm/prebuilt/linux-x86_64/bin"
 sdkver="35"
 # 这里用于统一化修改Mesa3D最新的稳定代码分支,这样就不需要再在后面到处改Mesa3D稳定版本号,而提升构建效率
-mesa_stable_branch="25.4"
-mesa_ver="25.4.0-alpha1"
+mesa_stable_branch="25.3"
+mesa_ver="25.3.1"
 
-# 更改Mesa3D驱动源码地址,让其跟随的是Mesa3D的稳定代码分支,当前最新的稳定版本分支是25.1, 这里临时用Master分支修复ZINK无法工作的问题
-# mesasrc="https://gitlab.freedesktop.org/mesa/mesa/-/archive/$mesa_stable_branch/mesa-$mesa_stable_branch.zip"
-mesasrc="https://gitlab.freedesktop.org/mesa/mesa/-/archive/main/mesa-main.zip"
+# 更改Mesa3D驱动源码地址,让其跟随的是Mesa3D的稳定代码分支
+mesasrc="https://gitlab.freedesktop.org/mesa/mesa/-/archive/$mesa_stable_branch/mesa-$mesa_stable_branch.zip"
 
 clear
 
@@ -65,7 +64,7 @@ prepare_workdir(){
 	echo "Exracting mesa source ..." $'\n'
 		unzip mesa-main.zip &> /dev/null
   		# 注意:这里及之后,我用$mesa_stable_branch顶替了原本的main分支,防止脚本报错
-		cd mesa-main
+		cd mesa-$mesa_stable_branch
 }
 
 
@@ -137,7 +136,7 @@ EOF
 		ninja -C build-android-aarch64 &> "$workdir/ninja_log"
   
         # 注意:在Mesa稳定分支更新后,需要更改下一行的mesa-<稳定版本>的版本号
-	if ! [ -a "$workdir"/mesa-main/build-android-aarch64/src/freedreno/vulkan/libvulkan_freedreno.so ]; then
+	if ! [ -a "$workdir"/mesa-$mesa_stable_branch/build-android-aarch64/src/freedreno/vulkan/libvulkan_freedreno.so ]; then
 		echo -e "$red Build failed! $nocolor" && exit 1
 	fi
 }
@@ -145,7 +144,7 @@ EOF
 port_lib_for_magisk(){
 	echo "Using patchelf to match soname ..." $'\n'
  		# 注意:在Mesa稳定分支更新后,需要更改下一行的mesa-<稳定版本>的版本号
-		cp "$workdir"/mesa-main/build-android-aarch64/src/freedreno/vulkan/libvulkan_freedreno.so "$workdir"
+		cp "$workdir"/mesa-$mesa_stable_branch/build-android-aarch64/src/freedreno/vulkan/libvulkan_freedreno.so "$workdir"
 		cd "$workdir"
 		patchelf --set-soname vulkan.adreno.so libvulkan_freedreno.so
 		mv libvulkan_freedreno.so vulkan.adreno.so
@@ -203,7 +202,7 @@ EOF
 port_lib_for_adrenotools(){
 	libname=vulkan.freedreno.so
 	echo "Using patchelf to match soname" $'\n'
-		cp "$workdir"/mesa-main/build-android-aarch64/src/freedreno/vulkan/libvulkan_freedreno.so "$workdir"/$libname
+		cp "$workdir"/mesa-$mesa_stable_branch/build-android-aarch64/src/freedreno/vulkan/libvulkan_freedreno.so "$workdir"/$libname
 		cd "$workdir"
 		patchelf --set-soname $libname $libname
 	echo "Preparing meta.json" $'\n'
