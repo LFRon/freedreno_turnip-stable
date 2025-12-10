@@ -11,10 +11,12 @@ ndkver="android-ndk-r29"
 ndk="$workdir/$ndkver/toolchains/llvm/prebuilt/linux-x86_64/bin"
 sdkver="35"
 # 这里用于统一化修改Mesa3D最新的稳定代码分支,这样就不需要再在后面到处改Mesa3D稳定版本号,而提升构建效率
-mesa_stable_branch="25.3"
+mesa_stable_branch="25.4"
+mesa_ver="25.4.0-alpha1"
 
-# 更改Mesa3D驱动源码地址,让其跟随的是Mesa3D的稳定代码分支,当前最新的稳定版本分支是25.1
-mesasrc="https://gitlab.freedesktop.org/mesa/mesa/-/archive/$mesa_stable_branch/mesa-$mesa_stable_branch.zip"
+# 更改Mesa3D驱动源码地址,让其跟随的是Mesa3D的稳定代码分支,当前最新的稳定版本分支是25.1, 这里临时用Master分支修复ZINK无法工作的问题
+# mesasrc="https://gitlab.freedesktop.org/mesa/mesa/-/archive/$mesa_stable_branch/mesa-$mesa_stable_branch.zip"
+mesasrc="https://gitlab.freedesktop.org/mesa/mesa/-/archive/main/mesa-main.zip"
 
 clear
 
@@ -176,7 +178,7 @@ EOF
 		cat <<EOF >"module.prop"
 id=freedreno_turnip_driver
 name=Turnip-Stable
-version=$mesa_stable_branch
+version=$mesa_ver
 versionCode=1
 author=MrMiy4mo,LFRon
 description=Mesa3D Freedreno子项目的Turnip开源驱动,适配Adreno 6xx+的骁龙集成显卡 .
